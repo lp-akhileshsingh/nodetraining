@@ -1,21 +1,22 @@
 const sql = require("mysql");
 const config = require("./config");
 var pool = null;
-const excuteStoreProc = (query, closeDb = false) => {
+const excuteStoreProc = (query, closeDb = false, cb = () => null) => {
   console.log("config====", query);
   try {
     //Connect to db
 
     pool = sql.createConnection(config);
 
-    return pool.connect(function (err) {
+    pool.connect(function (err) {
       console.log("error==", err);
       if (err) throw err;
       console.log("Connected!");
-      return pool.query(query, function (err, result) {
-        if (err) throw err;
-        console.log("Database created");
-        return result;
+      pool.query(query, function (err2, result) {
+        if (err2) throw err2;
+        console.log("Database created", result);
+        console.log("error==2", err2);
+        cb([]);
       });
     });
 
@@ -34,6 +35,7 @@ const excuteStoreProc = (query, closeDb = false) => {
     //     : result.recordsets[0]
     //   : [];
   } catch (error) {
+    console.log("error===db", error);
     pool = null;
     throw error;
   }

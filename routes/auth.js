@@ -8,6 +8,7 @@ const {
   add_roles,
   add_modules,
   assign_role_modules,
+  get_roles,
 } = require("../controller/auth");
 const { successResponse } = require("../helper");
 
@@ -33,7 +34,7 @@ router.post(
 router.get("/get_role_routes", [isAuthenticated()], (req, res) => {
   getRoleRoutes(req, res);
 });
-router.post("/add_roles", (req, res, next) => {
+router.post("/roles", (req, res, next) => {
   add_roles(req, res, next);
 });
 router.post("/add_modules", (req, res, next) => {
@@ -44,4 +45,7 @@ router.post("/assign_role_modules", (req, res, next) => {
   assign_role_modules(req, res, next);
 });
 
+router.get("/roles", (req, res, next) => {
+  get_roles(req, res, next);
+});
 module.exports = router;

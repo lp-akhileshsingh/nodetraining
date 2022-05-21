@@ -249,6 +249,19 @@ const add_roles = async (req, res, next) => {
     next(error);
   }
 };
+const get_roles = (req, res, next) => {
+  try {
+    let query = `select * from roles;`;
+    spoc(query, function (data) {
+      console.log("data====", data);
+      successResponse(req, res, { error: false, data });
+    });
+    console.log("query====", query);
+  } catch (error) {
+    console.log("error==1", error);
+    next(error);
+  }
+};
 const add_modules = async (req, res, next) => {
   try {
     const { name, parent, routes } = req.body;
@@ -283,4 +296,5 @@ module.exports = {
   add_roles,
   add_modules,
   assign_role_modules,
+  get_roles,
 };
