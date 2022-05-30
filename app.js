@@ -23,7 +23,9 @@ app.get("/", (req, res) => {
 });
 
 app.listen(port, async (req, res) => {
-  await spoc("CREATE DATABASE IF NOT EXISTS nodetraining", function (data) {});
+  await spoc("CREATE DATABASE IF NOT EXISTS nodetraining", false, function (
+    data
+  ) {});
   createTables();
   console.log(`Port started on ${port}`);
 });

@@ -9,6 +9,9 @@ const {
   add_modules,
   assign_role_modules,
   get_roles,
+  delete_roles,
+  edit_role,
+  get_modules,
 } = require("../controller/auth");
 const { successResponse } = require("../helper");
 
@@ -47,5 +50,14 @@ router.post("/assign_role_modules", (req, res, next) => {
 
 router.get("/roles", (req, res, next) => {
   get_roles(req, res, next);
+});
+router.delete("/roles", (req, res, next) => {
+  delete_roles(req, res, next);
+});
+router.patch("/roles", (req, res, next) => {
+  edit_role(req, res, next);
+});
+router.get("/modules", (req, res, next) => {
+  get_modules(req, res, next);
 });
 module.exports = router;

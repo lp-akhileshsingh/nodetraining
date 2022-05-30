@@ -239,11 +239,15 @@ const add_roles = async (req, res, next) => {
   try {
     const { name } = req.body;
     let query = `INSERT INTO Roles(name) VALUES('${name}')`;
-    let data = await spoc(query);
-    console.log("data====", data);
-    successResponse(req, res, {
-      error: false,
-      message: "Roles added successsfully",
+    spoc(query, false, function (err, result) {
+      if (err) {
+        next(err);
+      } else {
+        successResponse(req, res, {
+          error: false,
+          message: "Roles added successsfully",
+        });
+      }
     });
   } catch (error) {
     next(error);
@@ -252,9 +256,32 @@ const add_roles = async (req, res, next) => {
 const get_roles = (req, res, next) => {
   try {
     let query = `select * from roles;`;
-    spoc(query, function (data) {
+
+    spoc(query, false, function (err, data) {
       console.log("data====", data);
-      successResponse(req, res, { error: false, data });
+      if (err) {
+        next(err);
+      } else {
+        successResponse(req, res, { error: false, data });
+      }
+    });
+    console.log("query====", query);
+  } catch (error) {
+    console.log("error==1", error);
+    next(error);
+  }
+};
+const get_modules = (req, res, next) => {
+  try {
+    let query = `select * from modules;`;
+
+    spoc(query, false, function (err, data) {
+      console.log("data====", data);
+      if (err) {
+        next(err);
+      } else {
+        successResponse(req, res, { error: false, data });
+      }
     });
     console.log("query====", query);
   } catch (error) {
@@ -266,10 +293,15 @@ const add_modules = async (req, res, next) => {
   try {
     const { name, parent, routes } = req.body;
     let query = `INSERT INTO Modules(Name,Parent,Routes) VALUES('${name}','${parent}','${routes}')`;
-    let data = await spoc(query);
-    successResponse(req, res, {
-      error: false,
-      message: "Modules added successfully",
+    spoc(query, false, function (err, result) {
+      if (err) {
+        next(err);
+      } else {
+        successResponse(req, res, {
+          error: false,
+          message: "Modules added successfully",
+        });
+      }
     });
   } catch (error) {
     next(error);
@@ -288,6 +320,47 @@ const assign_role_modules = async (req, res, next) => {
     next(error);
   }
 };
+const delete_roles = (req, res, next) => {
+  try {
+    let query = `DELETE FROM Roles WHERE id=${req.body.id}`;
+
+    spoc(query, false, function (err, data) {
+      if (err) {
+        next(err);
+      } else {
+        successResponse(req, res, {
+          error: false,
+          message: "Roles deleted successfully",
+        });
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Edit Role
+ * @param {id,name} req.body
+ */
+const edit_role = async (req, res, next) => {
+  try {
+    const { id, name } = req.body;
+    let query = `UPDATE  Roles SET name='${name}' where id=${id}`;
+    spoc(query, false, function (err, result) {
+      if (err) {
+        next(err);
+      } else {
+        successResponse(req, res, {
+          error: false,
+          message: "Role updated succesfully",
+        });
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   login,
   signup,
@@ -297,4 +370,7 @@ module.exports = {
   add_modules,
   assign_role_modules,
   get_roles,
+  delete_roles,
+  edit_role,
+  get_modules,
 };
